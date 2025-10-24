@@ -2,9 +2,9 @@ import streamlit as st
 import plotly.graph_objects as go
 
 init_length = 100
-init_precision = 10
-MAX_LENGTH = 1000
-MAX_PRECISION = 50
+init_precision = 2
+MAX_LENGTH = 500
+MAX_PRECISION = 10
 x_axis = [x / init_precision for x in range(init_length * init_precision)]
 
 if "data" not in st.session_state:
