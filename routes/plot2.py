@@ -61,6 +61,10 @@ with col1:
         ["x^2", "x+10", "x*3", "x^0.25", "x/2"],
         key="options",
     )
+    st.session_state.data["range"] = st.slider(
+    "Data range", max_value=MAX_LENGTH, min_value=10, value=init_length, step=10
+)
+
 with col2:
     st.selectbox(
         "Linetype",
@@ -68,12 +72,9 @@ with col2:
         key="linetype",
     )
 
-st.session_state.data["range"] = st.slider(
-    "Data range", max_value=MAX_LENGTH, min_value=10, value=init_length, step=10
-)
-st.session_state.data["precision"] = st.slider(
-    "Precision", max_value=MAX_PRECISION, min_value=1, value=init_precision
-)
+    st.session_state.data["precision"] = st.slider(
+        "Precision", max_value=MAX_PRECISION, min_value=1, value=init_precision
+    )
 
 fig1 = go.Figure()
 fig1.add_trace(
