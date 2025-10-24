@@ -14,6 +14,8 @@ if "data" not in st.session_state:
         "range": init_length,
         "precision": init_precision,
     }
+if "linetype" not in st.session_state:
+    st.session_state.linetype = "lines"
 
 
 def generate_data(dict):
@@ -52,11 +54,19 @@ if "options" not in st.session_state:
 if "show_ref" not in st.session_state:
     st.session_state.show_ref = True
 
-st.multiselect(
-    "Choose modules",
-    ["x^2", "x+10", "x*3", "x^0.25", "x/2"],
-    key="options",
-)
+col1, col2 = st.columns(2)
+with col1:
+    st.multiselect(
+        "Choose modules",
+        ["x^2", "x+10", "x*3", "x^0.25", "x/2"],
+        key="options",
+    )
+with col2:
+    st.selectbox(
+        "Linetype",
+        ["lines", "markers", "lines+markers"],
+        key="linetype",
+    )
 
 st.session_state.data["range"] = st.slider(
     "Data range", max_value=MAX_LENGTH, value=init_length
@@ -70,6 +80,7 @@ fig1.add_trace(
     go.Scatter(
         x=st.session_state.data["x_axis"],
         y=st.session_state.data["y_axis"],
+        mode=st.session_state.linetype,
         name="Line",
     )
 )
