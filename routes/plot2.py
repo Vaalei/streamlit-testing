@@ -37,7 +37,8 @@ def generate_data(dict):
 
 if "options" not in st.session_state:
     st.session_state.options = []
-
+if "show_ref" not in st.session_state:
+    st.session_state.show_ref = True
 
 st.multiselect(
     "Choose modules",
@@ -50,14 +51,14 @@ fig1.add_trace(
     go.Scatter(x=st.session_state.data["x_axis"], y=st.session_state.data["y_axis"], name="Line")
 )
 
-if "show_ref" in st.session_state and st.session_state.show_ref:
+if st.session_state.show_ref:
     fig1.add_trace(
         go.Scatter(x=st.session_state.data["x_axis"], y=st.session_state.data["x_axis"], name="Reference Line")
     )
 
 
 st.plotly_chart(fig1)
-st.session_state.show_ref = st.checkbox("Show reference line (f(x)=x)", disabled=False)
+st.session_state.show_ref = st.checkbox("Show reference line (f(x)=x)", value = True)
 
 if st.button("Generate"):
     generate_data(st.session_state.options)
