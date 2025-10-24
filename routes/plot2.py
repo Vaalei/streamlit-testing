@@ -69,10 +69,10 @@ with col2:
     )
 
 st.session_state.data["range"] = st.slider(
-    "Data range", max_value=MAX_LENGTH, value=init_length
+    "Data range", max_value=MAX_LENGTH, min_value=10, value=init_length, step=10
 )
 st.session_state.data["precision"] = st.slider(
-    "Precision", max_value=MAX_PRECISION, value=init_precision
+    "Precision", max_value=MAX_PRECISION, min_value=1, value=init_precision
 )
 
 fig1 = go.Figure()
