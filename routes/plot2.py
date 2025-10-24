@@ -1,13 +1,12 @@
 import streamlit as st
 import plotly.graph_objects as go
 
-x_axis = [x / 10 for x in range(100)]
+init_length = 100
+MAX_LENGTH = 1000
+x_axis = [x / 10 for x in range(init_length)]
 
 if "data" not in st.session_state:
-    st.session_state.data = {
-        "x_axis": x_axis,
-        "y_axis": x_axis,
-    }
+    st.session_state.data = {"x_axis": x_axis, "y_axis": x_axis, "range": init_length}
 
 
 def generate_data(dict):
@@ -30,6 +29,9 @@ def generate_data(dict):
             multi *= num
         elif "x/" in e:
             multi /= num
+    st.session_state.data["x_axis"] = [
+        x / 10 for x in range(st.session_state.data["range"])
+    ]
     st.session_state.data["y_axis"] = [
         add + (x**exponent) * multi for x in st.session_state.data["x_axis"]
     ]
@@ -46,19 +48,29 @@ st.multiselect(
     key="options",
 )
 
+st.session_state.data["range"] = st.slider("Data range", max_value=MAX_LENGTH, value=init_length)
+
 fig1 = go.Figure()
 fig1.add_trace(
-    go.Scatter(x=st.session_state.data["x_axis"], y=st.session_state.data["y_axis"], name="Line")
+    go.Scatter(
+        x=st.session_state.data["x_axis"],
+        y=st.session_state.data["y_axis"],
+        name="Line",
+    )
 )
 
 if st.session_state.show_ref:
     fig1.add_trace(
-        go.Scatter(x=st.session_state.data["x_axis"], y=st.session_state.data["x_axis"], name="Reference Line")
+        go.Scatter(
+            x=st.session_state.data["x_axis"],
+            y=st.session_state.data["x_axis"],
+            name="Reference Line",
+        )
     )
 
 
 st.plotly_chart(fig1)
-st.session_state.show_ref = st.checkbox("Show reference line (f(x)=x)", value = True)
+st.session_state.show_ref = st.checkbox("Show reference line (f(x)=x)", value=True)
 
 if st.button("Generate"):
     generate_data(st.session_state.options)
