@@ -2,11 +2,18 @@ import streamlit as st
 import plotly.graph_objects as go
 
 init_length = 100
+init_precision = 10
 MAX_LENGTH = 1000
-x_axis = [x / 10 for x in range(init_length)]
+MAX_PRECISION = 50
+x_axis = [x / init_precision for x in range(init_length * init_precision)]
 
 if "data" not in st.session_state:
-    st.session_state.data = {"x_axis": x_axis, "y_axis": x_axis, "range": init_length}
+    st.session_state.data = {
+        "x_axis": x_axis,
+        "y_axis": x_axis,
+        "range": init_length,
+        "precision": init_precision,
+    }
 
 
 def generate_data(dict):
@@ -30,7 +37,10 @@ def generate_data(dict):
         elif "x/" in e:
             multi /= num
     st.session_state.data["x_axis"] = [
-        x / 10 for x in range(st.session_state.data["range"])
+        x / st.session_state.data["precision"]
+        for x in range(
+            st.session_state.data["range"] * st.session_state.data["precision"]
+        )
     ]
     st.session_state.data["y_axis"] = [
         add + (x**exponent) * multi for x in st.session_state.data["x_axis"]
@@ -48,7 +58,12 @@ st.multiselect(
     key="options",
 )
 
-st.session_state.data["range"] = st.slider("Data range", max_value=MAX_LENGTH, value=init_length)
+st.session_state.data["range"] = st.slider(
+    "Data range", max_value=MAX_LENGTH, value=init_length
+)
+st.session_state.data["precision"] = st.slider(
+    "Precision", max_value=MAX_PRECISION, value=init_precision
+)
 
 fig1 = go.Figure()
 fig1.add_trace(
